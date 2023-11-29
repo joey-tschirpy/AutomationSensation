@@ -13,3 +13,8 @@ MonoBehaviour:
   m_Name: Player Action Settings
   m_EditorClassIdentifier: 
   movementSpeed: 5
+  airMovementMultiplier: 0.2
+  groundDrag: 2
+  airDrag: 0
+  jumpForce: 10
+  jumpCooldown: 0.2
