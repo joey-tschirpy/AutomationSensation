@@ -20,5 +20,9 @@ namespace Player
         [Tooltip("Max angle the player can look down in degrees (0 forward, 90 down)")]
         [Range(0, 90)]
         public float maxAngleDown = 80;
+
+        [Tooltip("Speed of player rotation in third person mode")]
+        [Min(0)]
+        public float thirdPersonPlayerRotationSpeed = 10f;
     }
 }

@@ -9,7 +9,8 @@ namespace Player
         [SerializeField] private InputActionReference movementInput;
         [SerializeField] private InputActionReference jumpInput;
         [SerializeField] private PlayerActionSettings actionSettings;
-
+        [SerializeField] private Transform playerOrientation;
+        
         private Rigidbody rb;
         private PlayerStatus status;
         
@@ -28,22 +29,17 @@ namespace Player
 
         private void Update()
         {
-            ProcessInput();
+            ProcessVerticalMovementInput();
             SpeedControl();
         }
 
         private void FixedUpdate()
         {
+            ProcessHorizontalMovementInput();
             MovePlayer();
         }
 
         #region ProcessingInput
-
-        private void ProcessInput()
-        {
-            ProcessHorizontalMovementInput();
-            ProcessVerticalMovementInput();
-        }
 
         private void ProcessHorizontalMovementInput()
         {
@@ -55,9 +51,8 @@ namespace Player
                 return;
             }
             
-            var rbTransform = rb.transform;
-            currentMoveDirection = (rbTransform.forward * movementInputValue.y +
-                                    rbTransform.right * movementInputValue.x).normalized;
+            currentMoveDirection = (playerOrientation.forward * movementInputValue.y +
+                                    playerOrientation.right * movementInputValue.x).normalized;
         }
 
         private void ProcessVerticalMovementInput()
