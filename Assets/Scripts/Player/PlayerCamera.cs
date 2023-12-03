@@ -59,8 +59,10 @@ namespace Player
                     UpdateFirstPerson();
                     break;
                 case PlayerCameraMode.ThirdPerson:
-                case PlayerCameraMode.ThirdPersonAction:
                     UpdateThirdPerson();
+                    break;
+                case PlayerCameraMode.ThirdPersonAction:
+                    UpdateThirdPersonAction();
                     break;
                 default:
                     // Should never get here
@@ -110,24 +112,6 @@ namespace Player
             }
         }
 
-        private void UpdateThirdPerson()
-        {
-            var viewVector = playerObject.position -
-                                new Vector3(transform.position.x, playerObject.position.y, transform.position.z);
-
-            if (viewVector == Vector3.zero)
-            {
-                return;
-            }
-            
-            playerOrientation.forward = viewVector.normalized;
-            var inputDirection =
-                playerOrientation.forward * verticalInput + playerOrientation.right * horizontalInput;
-            
-            playerObject.forward = Vector3.Slerp(playerObject.forward, inputDirection.normalized,
-                Time.deltaTime * cameraSettings.thirdPersonPlayerRotationSpeed);
-        }
-
         private void UpdateFirstPerson()
         {
             lookRotationY += mouseXInput;
@@ -140,6 +124,37 @@ namespace Player
         
             // Update Camera position to stay with player
             transform.position = playerCameraHolder.position;
+        }
+
+        private void UpdateThirdPerson()
+        {
+            UpdateThirdPersonOrientation();
+            
+            var inputDirection =
+                playerOrientation.forward * verticalInput + playerOrientation.right * horizontalInput;
+            
+            playerObject.forward = Vector3.Slerp(playerObject.forward, inputDirection.normalized,
+                Time.deltaTime * cameraSettings.thirdPersonPlayerRotationSpeed);
+        }
+
+        private void UpdateThirdPersonAction()
+        {
+            UpdateThirdPersonOrientation();
+
+            playerObject.forward = playerOrientation.forward;
+        }
+
+        private void UpdateThirdPersonOrientation()
+        {
+            var viewVector = playerObject.position -
+                             new Vector3(transform.position.x, playerObject.position.y, transform.position.z);
+
+            if (viewVector == Vector3.zero)
+            {
+                return;
+            }
+            
+            playerOrientation.forward = viewVector.normalized;
         }
     }
 }
